@@ -4,14 +4,14 @@ from . import views
 urlpatterns = [
 
     # ---------------- HOME ----------------
-    path('index', views.index, name='index'),
+    path('', views.index, name='index'),
 
     # ---------------- RECIPES ----------------
     path('recipes/', views.all_recipes, name='all_recipes'),
     path('recipe/<int:id>/', views.recipe_detail, name='recipe_detail'),
 
     # ---------------- ADMIN ----------------
-    path('', views.admindashboard, name='admindashboard'),
+    path('admindashboard', views.admindashboard, name='admindashboard'),
     path('add-recipe/', views.add_recipe, name='add_recipe'),
     path('edit-recipe/<int:id>/', views.edit_recipe, name='edit_recipe'),
     path('delete-recipe/<int:id>/', views.delete_recipe, name='delete_recipe'),
