@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-4">
+
+                    <h2 class="mb-4 text-center fw-bold">✏️ Edit Recipe</h2>
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label class="form-label">Recipe Title</label>
+                            <input type="text" name="title"
+                                   value="{{ recipe.title }}"
+                                   class="form-control" required>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description"
+                                      class="form-control"
+                                      rows="3">{{ recipe.description }}</textarea>
+                        </div>
+
+                        <!-- Image -->
+                        <div class="mb-3">
+                            <label class="form-label">Recipe Image</label>
+                            <input type="file" name="image" class="form-control">
+
+                            {% if recipe.image %}
+                                <img src="{{ recipe.image.url }}" 
+                                     class="mt-2 rounded" 
+                                     width="150">
+                            {% endif %}
+                        </div>
+
+                        <!-- Ingredients -->
+                        <div class="mb-3">
+                            <label class="form-label">Ingredients</label>
+                            <textarea name="ingredients"
+                                      class="form-control"
+                                      rows="4"
+                                      placeholder="One per line...">{{ recipe.ingredients }}</textarea>
+                        </div>
+
+                        <!-- Steps -->
+                        <div class="mb-4">
+                            <label class="form-label">Steps</label>
+                            <textarea name="steps"
+                                      class="form-control"
+                                      rows="5"
+                                      placeholder="Step by step...">{{ recipe.steps }}</textarea>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'admindashboard' %}" class="btn btn-secondary">
+                                Cancel
+                            </a>
+
+                            <button type="submit" class="btn btn-success">
+                                Update Recipe
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

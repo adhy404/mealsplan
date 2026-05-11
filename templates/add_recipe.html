@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="card shadow-sm p-4">
+        <h2 class="mb-4 text-center">Add New Recipe</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- CATEGORY -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Category</label>
+                <select name="category" class="form-select" required>
+                    <option value="">Select Category</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- TITLE -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Title</label>
+                <input type="text" name="title" class="form-control" placeholder="Enter recipe title" required>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Description</label>
+                <textarea name="description" class="form-control" rows="3" placeholder="Enter recipe description" required></textarea>
+            </div>
+
+            <!-- IMAGE -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Recipe Image</label>
+                <input type="file" name="image" class="form-control" accept="image/*">
+            </div>
+
+            <!-- INGREDIENTS -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Ingredients</label>
+                <textarea name="ingredients" class="form-control" rows="4" placeholder="Enter one ingredient per line"></textarea>
+            </div>
+
+            <!-- STEPS -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Cooking Steps</label>
+                <textarea name="steps" class="form-control" rows="4" placeholder="Enter one step per line"></textarea>
+            </div>
+
+            <!-- COOKING TIME -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Cooking Time</label>
+                <input type="number" name="cooking_time" required>
+            </div>
+
+            <!-- SERVINGS -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Servings</label>
+                <input type="number" name="servings" required>
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-success px-4">
+                    Save Recipe
+                </button>
+
+                <a href="{% url 'admindashboard' %}" class="btn btn-secondary ms-2 px-4">
+                    Back
+                </a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+{% endblock %}

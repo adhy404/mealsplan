@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container py-5 text-center">
+
+    <h1 class="fw-bold">Choose Your Plan</h1>
+    <p class="text-muted">Upgrade anytime. Cancel anytime.</p>
+
+    <div class="row justify-content-center mt-5">
+
+        <!-- FREE -->
+        <div class="col-md-4 mb-4">
+            <div class="card p-4 shadow-sm border-0 plan">
+
+                <h4>Free</h4>
+                <h2>₹0</h2>
+
+                <ul>
+                    <li>✔ Basic recipes</li>
+                    <li>✔ Limited access</li>
+                </ul>
+
+                <a href="/" class="btn btn-outline-primary w-100">Current Plan</a>
+
+            </div>
+        </div>
+
+        <!-- PRO -->
+        <div class="col-md-4 mb-4">
+            <div class="card p-4 shadow-lg border-success plan featured">
+
+                <span class="badge bg-success mb-2">MOST POPULAR</span>
+
+                <h4>Pro</h4>
+                <h2>₹99</h2>
+
+                <ul>
+                    <li>✔ Premium recipes</li>
+                    <li>✔ Favorites system</li>
+                    <li>✔ Meal planner</li>
+                </ul>
+
+                <a href="{% url 'checkout' %}" class="btn btn-success w-100">Upgrade Now</a>
+
+            </div>
+        </div>
+
+        <!-- PREMIUM -->
+        <div class="col-md-4 mb-4">
+            <div class="card p-4 shadow-sm border-0 plan">
+
+                <h4>Premium</h4>
+                <h2>₹199</h2>
+
+                <ul>
+                    <li>✔ Everything in Pro</li>
+                    <li>✔ AI meal plans</li>
+                    <li>✔ Priority support</li>
+                </ul>
+
+                <a href="{% url 'checkout' %}" class="btn btn-dark w-100">Go Premium</a>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+.plan {
+    border-radius: 18px;
+    transition: 0.3s ease;
+}
+
+.plan:hover {
+    transform: translateY(-8px);
+}
+
+.featured {
+    transform: scale(1.05);
+}
+</style>
+
+{% endblock %}

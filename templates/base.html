@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DishDeck</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --cream: #FAF7F2;
+            --dark: #1A1209;
+            --amber: #D4622A;
+            --amber-light: #F0956A;
+            --amber-pale: #FBE8DC;
+            --muted: #8A7F72;
+            --nav-bg: #fff;
+            --card-radius: 20px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--cream);
+            font-family: 'DM Sans', 'Segoe UI', sans-serif;
+            color: var(--dark);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── TOP ANNOUNCEMENT STRIP ── */
+        .top-strip {
+            background: var(--dark);
+            color: var(--cream);
+            text-align: center;
+            padding: 9px 1rem;
+            font-size: 13px;
+            letter-spacing: 0.03em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-strip::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(212,98,42,0.25) 50%, transparent 100%);
+            animation: shimmer 3.5s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .top-strip a {
+            color: var(--amber-light);
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(240,149,106,0.4);
+            transition: border-color 0.2s;
+        }
+
+        .top-strip a:hover { border-color: var(--amber-light); }
+
+        .strip-badge {
+            display: inline-block;
+            background: var(--amber);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 100px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* ── MAIN NAVBAR ── */
+        .main-nav {
+            background: var(--nav-bg);
+            border-bottom: 0.5px solid rgba(26,18,9,0.08);
+            padding: 0 2.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+            transition: box-shadow 0.3s;
+        }
+
+        .main-nav.scrolled {
+            box-shadow: 0 4px 24px rgba(26,18,9,0.08);
+        }
+
+        /* Brand */
+        .brand {
+            text-decoration: none;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .brand-mark {
+            width: 34px;
+            height: 34px;
+            background: var(--dark);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            line-height: 1;
+        }
+
+        .brand-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        /* Search */
+        .nav-search {
+            display: flex;
+            align-items: center;
+            background: var(--cream);
+            border: 1px solid rgba(26,18,9,0.12);
+            border-radius: 100px;
+            padding: 0 14px;
+            gap: 8px;
+            height: 40px;
+            width: 280px;
+            transition: border-color 0.2s, box-shadow 0.2s, width 0.3s;
+        }
+
+        .nav-search:focus-within {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 3px rgba(212,98,42,0.1);
+            width: 320px;
+        }
+
+        .nav-search svg { flex-shrink: 0; opacity: 0.45; }
+
+        .nav-search input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--dark);
+            width: 100%;
+        }
+
+        .nav-search input::placeholder { color: var(--muted); }
+
+        /* Nav right */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link-plain {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 100px;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .nav-link-plain:hover { color: var(--dark); background: rgba(26,18,9,0.04); }
+
+        /* Create Plan btn */
+        .btn-create {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--cream);
+            border: 1px solid rgba(26,18,9,0.14);
+            color: var(--dark);
+            font-size: 13.5px;
+            font-weight: 500;
+            padding: 7px 16px;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .btn-create:hover {
+            background: #EDE7DC;
+            border-color: rgba(26,18,9,0.22);
+            color: var(--dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-create .plus-icon {
+            width: 18px;
+            height: 18px;
+            background: var(--amber);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        /* Login / Join */
+        .btn-login {
+            font-size: 14px;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 7px 14px;
+            border-radius: 100px;
+            font-family: 'DM Sans', sans-serif;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .btn-login:hover { color: var(--dark); background: rgba(26,18,9,0.04); }
+
+        .btn-join {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--amber);
+            color: #fff;
+            font-size: 13.5px;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-family: 'DM Sans', sans-serif;
+            transition: background 0.2s, transform 0.15s;
+            border: none;
+        }
+
+        .btn-join:hover { background: #C0531F; color: #fff; transform: translateY(-1px); }
+
+        /* User dropdown trigger */
+        .user-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--cream);
+            border: 1px solid rgba(26,18,9,0.12);
+            border-radius: 100px;
+            padding: 5px 14px 5px 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 400;
+            color: var(--dark);
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .user-chip:hover { background: #EDE7DC; border-color: rgba(26,18,9,0.2); }
+
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            background: var(--dark);
+            color: var(--cream);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+            flex-shrink: 0;
+        }
+
+        .chevron-icon {
+            font-size: 10px;
+            opacity: 0.4;
+            transition: transform 0.2s;
+        }
+
+        .user-chip[aria-expanded="true"] .chevron-icon { transform: rotate(180deg); }
+
+        /* Dropdown menu */
+        .nav-dropdown {
+            border: 0.5px solid rgba(26,18,9,0.1) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 16px 48px rgba(26,18,9,0.14) !important;
+            padding: 8px !important;
+            min-width: 210px;
+            background: #fff;
+            animation: dropIn 0.18s ease forwards;
+        }
+
+        @keyframes dropIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-dropdown .dropdown-item {
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--dark);
+            padding: 9px 14px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.15s;
+        }
+
+        .nav-dropdown .dropdown-item:hover { background: var(--cream); }
+
+        .nav-dropdown .dropdown-item .d-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--cream);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .nav-dropdown .dropdown-item.text-warning { color: #C07A00 !important; }
+        .nav-dropdown .dropdown-item.text-warning .d-icon { background: #FFF8E6; }
+
+        .nav-dropdown .dropdown-item.text-danger { color: #B33A3A !important; }
+        .nav-dropdown .dropdown-item.text-danger .d-icon { background: #FFF0F0; }
+
+        .nav-dropdown .dropdown-divider {
+            border-color: rgba(26,18,9,0.07);
+            margin: 6px 0;
+        }
+
+        /* ── CATEGORY BAR ── */
+        .cat-bar {
+            background: #fff;
+            border-bottom: 0.5px solid rgba(26,18,9,0.07);
+            padding: 0 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 46px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .cat-bar::-webkit-scrollbar { display: none; }
+
+        .cat-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 5px 14px;
+            border-radius: 100px;
+            white-space: nowrap;
+            transition: color 0.2s, background 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .cat-link:hover {
+            color: var(--dark);
+            background: var(--cream);
+            border-color: rgba(26,18,9,0.1);
+        }
+
+        .cat-link.active {
+            color: var(--amber);
+            background: var(--amber-pale);
+            border-color: rgba(212,98,42,0.2);
+            font-weight: 500;
+        }
+
+        .cat-dot {
+            width: 5px;
+            height: 5px;
+            background: var(--amber);
+            border-radius: 50%;
+            display: none;
+        }
+
+        .cat-link.active .cat-dot { display: block; }
+
+        /* ── CONTENT ── */
+        .page-content {
+            min-height: calc(100vh - 200px);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--dark);
+            color: rgba(250,247,242,0.6);
+            padding: 4rem 0 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--cream);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .footer-tagline { font-size: 14px; line-height: 1.6; max-width: 260px; }
+
+        .footer-heading {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(250,247,242,0.35);
+            margin-bottom: 16px;
+        }
+
+        .footer-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: rgba(250,247,242,0.6);
+            font-size: 14px;
+            padding: 4px 0;
+            transition: color 0.2s, gap 0.2s;
+        }
+
+        .footer-link::before {
+            content: '→';
+            font-size: 11px;
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--cream);
+            gap: 10px;
+        }
+
+        .footer-link:hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .footer-contact-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(250,247,242,0.07);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .footer-divider {
+            border-color: rgba(250,247,242,0.08);
+            margin: 2rem 0 1.5rem;
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: rgba(250,247,242,0.3);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 8px;
+        }
+
+        .social-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(250,247,242,0.07);
+            border-radius: 8px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .social-pill:hover { background: var(--amber); transform: translateY(-2px); }
+
+        /* ── FLASH MESSAGES ── */
+        .flash-wrap {
+            position: fixed;
+            top: 80px;
+            right: 1.5rem;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .flash-toast {
+            background: var(--dark);
+            color: var(--cream);
+            font-size: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            border-left: 3px solid var(--amber);
+            box-shadow: 0 8px 24px rgba(26,18,9,0.2);
+            animation: toastIn 0.35s ease forwards, toastOut 0.35s ease forwards 3.5s;
+            pointer-events: all;
+            max-width: 320px;
+        }
+
+        .flash-toast.success { border-color: #3D9E70; }
+        .flash-toast.error { border-color: #C04040; }
+        .flash-toast.warning { border-color: #C07A00; }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(20px); }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .main-nav { padding: 0 1.25rem; }
+            .nav-search { width: 200px; }
+            .nav-search:focus-within { width: 220px; }
+            .cat-bar { padding: 0 1.25rem; }
+        }
+
+        @media (max-width: 640px) {
+            .nav-search { display: none; }
+            .brand-text { display: none; }
+            .btn-create span { display: none; }
+        }
+
+        /* ── BOOTSTRAP OVERRIDES ── */
+        .btn { font-family: 'DM Sans', sans-serif; }
+    </style>
+</head>
+<body>
+
+<!-- ═══ FLASH MESSAGES ═══ -->
+{% if messages %}
+<div class="flash-wrap">
+    {% for message in messages %}
+    <div class="flash-toast {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- ═══ TOP STRIP ═══ -->
+<div class="top-strip">
+    <span class="strip-badge">New</span>
+    Free trial — no credit card required.
+    <a href="{% url 'pricing' %}">Start cooking smarter →</a>
+</div>
+
+<!-- ═══ MAIN NAVBAR ═══ -->
+<nav class="main-nav" id="mainNav">
+
+    <!-- LEFT: Brand + Search -->
+    <div class="d-flex align-items-center gap-3">
+
+        <a href="{% url 'index' %}" class="brand">
+            <div class="brand-mark">🍽</div>
+            <span class="brand-text">DishDeck</span>
+        </a>
+
+        <form method="GET" action="{% url 'all_recipes' %}" style="margin: 0;">
+            <div class="nav-search">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                </svg>
+                <input type="text" name="q" placeholder="Search recipes…" autocomplete="off">
+            </div>
+        </form>
+
+    </div>
+
+    <!-- RIGHT: Actions -->
+    <div class="nav-right">
+
+        <a href="{% url 'create_plan' %}" class="btn-create">
+            <span class="plus-icon">+</span>
+            <span>Create Plan</span>
+        </a>
+
+        <a href="{% url 'about' %}" class="nav-link-plain">About</a>
+
+        {% if user.is_authenticated %}
+
+        <div class="dropdown">
+            <button class="user-chip dropdown-toggle-plain"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                <div class="user-avatar">{{ user.username|first|upper }}</div>
+                {{ user.username }}
+                <span class="chevron-icon">▼</span>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end nav-dropdown">
+
+                <li>
+                    <a class="dropdown-item" href="{% url 'profile' %}">
+                        <span class="d-icon">👤</span>
+                        My Profile
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <span class="d-icon">❤️</span>
+                        My Favourites
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-item" href="{% url 'my_plans' %}">
+                        <span class="d-icon">📅</span>
+                        Meal Planner
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-item" href="{% url 'suggest_meals' %}">
+                        <span class="d-icon">🤖</span>
+                        AI Suggestions
+                    </a>
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li>
+                    <a class="dropdown-item text-warning" href="{% url 'pricing' %}">
+                        <span class="d-icon">💳</span>
+                        Upgrade Plan
+                    </a>
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li>
+                    <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                        <span class="d-icon">🚪</span>
+                        Log out
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+        {% else %}
+
+        <a href="{% url 'login' %}" class="btn-login">Log in</a>
+        <a href="{% url 'pricing' %}" class="btn-join">
+            Get started
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+<!-- ═══ CATEGORY BAR ═══ -->
+<div class="cat-bar">
+    <a href="{% url 'all_recipes' %}"
+       class="cat-link {% if request.path == '/recipes/' %}active{% endif %}">
+        <span class="cat-dot"></span>
+        All Recipes
+    </a>
+    <a href="{% url 'all_recipes' %}?category=weeknight"
+       class="cat-link {% if request.GET.category == 'weeknight' %}active{% endif %}">
+        <span class="cat-dot"></span>
+        Weeknight Dinner
+    </a>
+    <a href="{% url 'all_recipes' %}?category=lunch"
+       class="cat-link {% if request.GET.category == 'lunch' %}active{% endif %}">
+        <span class="cat-dot"></span>
+        Easy Lunches
+    </a>
+    <a href="{% url 'all_recipes' %}?category=highprotein"
+       class="cat-link {% if request.GET.category == 'highprotein' %}active{% endif %}">
+        <span class="cat-dot"></span>
+        High Protein
+    </a>
+    <a href="{% url 'all_recipes' %}?category=mealprep"
+       class="cat-link {% if request.GET.category == 'mealprep' %}active{% endif %}">
+        <span class="cat-dot"></span>
+        Meal Prep
+    </a>
+    <a href="{% url 'all_recipes' %}?category=dessert"
+       class="cat-link {% if request.GET.category == 'dessert' %}active{% endif %}">
+        <span class="cat-dot"></span>
+        Desserts
+    </a>
+    <a href="{% url 'all_recipes' %}?category=vegan"
+       class="cat-link {% if request.GET.category == 'vegan' %}active{% endif %}">
+        <span class="cat-dot"></span>
+        Vegan
+    </a>
+</div>
+
+<!-- ═══ PAGE CONTENT ═══ -->
+<div class="page-content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+    <div class="container">
+        <div class="row g-5">
+
+            <!-- Brand col -->
+            <div class="col-md-4">
+                <div class="footer-brand">
+                    <span style="font-size:1.3rem;">🍽</span>
+                    DishDeck
+                </div>
+                <p class="footer-tagline">
+                    Discover delicious recipes, plan your week, and eat better — every single day.
+                </p>
+                <div class="footer-socials mt-4">
+                    <a href="#" class="social-pill" title="Instagram">📸</a>
+                    <a href="#" class="social-pill" title="Twitter">🐦</a>
+                    <a href="#" class="social-pill" title="Pinterest">📌</a>
+                    <a href="#" class="social-pill" title="YouTube">▶️</a>
+                </div>
+            </div>
+
+            <!-- Links col -->
+            <div class="col-md-2 col-6">
+                <div class="footer-heading">Explore</div>
+                <a href="{% url 'index' %}" class="footer-link">Home</a>
+                <a href="{% url 'all_recipes' %}" class="footer-link">Recipes</a>
+                <a href="{% url 'about' %}" class="footer-link">About</a>
+                <a href="{% url 'pricing' %}" class="footer-link">Pricing</a>
+            </div>
+
+            <!-- Account col -->
+            <div class="col-md-2 col-6">
+                <div class="footer-heading">Account</div>
+                {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="footer-link">Profile</a>
+                <a href="{% url 'my_plans' %}" class="footer-link">Meal Plans</a>
+                <a href="{% url 'suggest_meals' %}" class="footer-link">AI Suggestions</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="footer-link">Log in</a>
+                <a href="{% url 'pricing' %}" class="footer-link">Sign up</a>
+                {% endif %}
+            </div>
+
+            <!-- Contact col -->
+            <div class="col-md-4">
+                <div class="footer-heading">Contact</div>
+                <div class="footer-contact-item">
+                    <div class="footer-contact-icon">✉️</div>
+                    support@dishdeck.com
+                </div>
+                <div class="footer-contact-item">
+                    <div class="footer-contact-icon">❤️</div>
+                    Made for food lovers
+                </div>
+
+                <!-- Newsletter mini -->
+                <form class="d-flex gap-2 mt-3" onsubmit="return false;">
+                    <input type="email" placeholder="Your email"
+                           style="background:rgba(250,247,242,0.07);border:1px solid rgba(250,247,242,0.12);color:var(--cream);border-radius:100px;padding:8px 14px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;flex:1;min-width:0;">
+                    <button style="background:var(--amber);color:#fff;border:none;border-radius:100px;padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:background 0.2s;"
+                            onmouseover="this.style.background='#C0531F'"
+                            onmouseout="this.style.background='var(--amber)'">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        <hr class="footer-divider">
+
+        <div class="footer-bottom">
+            <span>© {% now "Y" %} DishDeck. All rights reserved.</span>
+            <div class="d-flex gap-4">
+                <a href="#" style="color:inherit;text-decoration:none;font-size:13px;">Privacy</a>
+                <a href="#" style="color:inherit;text-decoration:none;font-size:13px;">Terms</a>
+                <a href="#" style="color:inherit;text-decoration:none;font-size:13px;">Cookies</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    /* Sticky nav shadow on scroll */
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    /* Auto-dismiss flash toasts */
+    document.querySelectorAll('.flash-toast').forEach(el => {
+        setTimeout(() => el.remove(), 4200);
+    });
+
+    /* Active category link highlight from URL */
+    (function() {
+        const path = location.pathname;
+        const params = new URLSearchParams(location.search);
+        document.querySelectorAll('.cat-link').forEach(link => {
+            const url = new URL(link.href, location.origin);
+            const lp = new URLSearchParams(url.search);
+            const isActive = url.pathname === path &&
+                (!lp.get('category') || lp.get('category') === params.get('category'));
+            link.classList.toggle('active', isActive);
+        });
+    })();
+</script>
+
+</body>
+</html>

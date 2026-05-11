@@ -1,0 +1,8 @@
+<h2>My Meal Plans</h2>
+
+{% for plan in plans %}
+    <div class="card p-3 mb-2">
+        <h4>{{ plan.name }}</h4>
+        <a href="{% url 'view_plan' plan.id %}" class="btn btn-primary">View</a>
+    </div>
+{% endfor %}

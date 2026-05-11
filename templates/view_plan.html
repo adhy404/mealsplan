@@ -1,0 +1,9 @@
+<h3>{{ plan.name }}</h3>
+
+<ul class="list-group">
+    {% for item in items %}
+        <li class="list-group-item">
+            <strong>{{ item.day }}</strong> → {{ item.recipe.title }}
+        </li>
+    {% endfor %}
+</ul>

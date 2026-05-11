@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment Success</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f6f9fc, #e9f7ef);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            width: 380px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #22c55e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: white;
+            animation: pop 0.4s ease-in-out;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            margin: 10px 0;
+            color: #1f2937;
+        }
+
+        p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .details {
+            margin-top: 20px;
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .btn {
+            margin-top: 25px;
+            display: inline-block;
+            padding: 12px 18px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #1e40af;
+        }
+
+        .small {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="checkmark">✓</div>
+
+    <h1>Payment Successful</h1>
+    <p>Your demo transaction has been completed</p>
+
+    <div class="details">
+        <p><b>Amount:</b> ₹499</p>
+        <p><b>Status:</b> Success</p>
+        <p><b>Transaction ID:</b> DEMO12345XYZ</p>
+    </div>
+
+    <a class="btn" href="/">Back to Home</a>
+
+    <div class="small">This is a demo payment system (no real transaction)</div>
+
+</div>
+
+</body>
+</html>
